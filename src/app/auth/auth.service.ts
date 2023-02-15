@@ -17,4 +17,8 @@ export class AuthService {
         return this.http.post<User>('/api/login', {email,password});
     }
 
+    logout() {
+        
+    }
+
 }
