@@ -4,6 +4,10 @@ import {Course} from '../model/course';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {CoursesHttpService} from '../services/courses-http.service';
+import { CoursesState } from '../reducers/course.reducers';
+import { Store } from '@ngrx/store';
+import { courseUpdated } from '../course.actions';
+import { Update } from '@ngrx/entity';
 
 @Component({
   selector: 'course-dialog',
@@ -26,7 +30,8 @@ export class EditCourseDialogComponent {
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<EditCourseDialogComponent>,
     @Inject(MAT_DIALOG_DATA) data,
-    private coursesService: CoursesHttpService) {
+    private coursesService: CoursesHttpService,
+    private store: Store<CoursesState>) {
 
     this.dialogTitle = data.dialogTitle;
     this.course = data.course;
@@ -63,10 +68,18 @@ export class EditCourseDialogComponent {
       ...this.form.value
     };
 
-    this.coursesService.saveCourse(course.id, course)
-      .subscribe(
-        () => this.dialogRef.close()
-      )
+    const update: Update<Course> = {
+      id: course.id,
+      changes: course
+    };
+
+    this.store.dispatch(courseUpdated({ update }));
+    this.dialogRef.close();
+
+    // this.coursesService.saveCourse(course.id, course)
+    //   .subscribe(
+    //     () => this.dialogRef.close()
+    //   )
 
 
   }
