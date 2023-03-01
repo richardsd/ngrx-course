@@ -66,6 +66,7 @@ const routes: Routes = [
      }),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }), /** (reducers, metaReducers)  */
     EffectsModule.forRoot([]),
+    EntityDataModule.forRoot({}),
     StoreRouterConnectingModule.forRoot({
       stateKey: 'router',
       routerState: RouterState.Minimal,
